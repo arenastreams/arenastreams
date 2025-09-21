@@ -51,6 +51,43 @@ async function handleRequest(request) {
     })
   }
   
+  // Root endpoint - API documentation
+  if (url.pathname === '/') {
+    const apiDoc = {
+      name: 'ArenaStreams API',
+      version: '1.0.0',
+      description: 'Sports streaming API powered by Cloudflare Workers',
+      endpoints: {
+        health: '/health',
+        sports: '/api/sports',
+        matches: {
+          football: '/api/matches/football',
+          basketball: '/api/matches/basketball',
+          tennis: '/api/matches/tennis',
+          ufc: '/api/matches/ufc',
+          rugby: '/api/matches/rugby',
+          baseball: '/api/matches/baseball',
+          'american-football': '/api/matches/american-football',
+          cricket: '/api/matches/cricket',
+          'motor-sports': '/api/matches/motor-sports',
+          hockey: '/api/matches/hockey'
+        },
+        streams: '/api/stream/{source}/{id}',
+        streamEmbed: '/api/stream/embed/{id}',
+        match: '/api/match/{slug}'
+      },
+      status: 'active',
+      timestamp: Date.now()
+    }
+    
+    return new Response(JSON.stringify(apiDoc, null, 2), {
+      headers: { 
+        ...corsHeaders, 
+        'Content-Type': 'application/json'
+      }
+    })
+  }
+  
   return new Response('API endpoint not found', { 
     status: 404,
     headers: corsHeaders
