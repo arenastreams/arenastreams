@@ -9,6 +9,9 @@ const { minify } = require('html-minifier-terser');
 const fs = require('fs').promises;
 const http = require('http');
 
+// Workers API Base URL
+const WORKERS_API_BASE = 'https://arenastreams-api.enea-scalper.workers.dev';
+
 // Register Handlebars helpers
 handlebars.registerHelper('json', function(context) {
   return new handlebars.SafeString(JSON.stringify(context));
@@ -1426,10 +1429,10 @@ app.get('/matchadblock/:slug', async (req, res) => {
   }
 });
 
-// Streamed.pk API proxy endpoints
+// Workers API proxy endpoints (for backward compatibility)
 app.get('/api/streamed/sports', async (req, res) => {
   try {
-    const response = await axios.get(`${STREAMED_API_BASE}/sports`, {
+    const response = await axios.get(`${WORKERS_API_BASE}/api/sports`, {
       timeout: 10000
     });
     res.json(response.data);
@@ -1442,7 +1445,7 @@ app.get('/api/streamed/sports', async (req, res) => {
 app.get('/api/streamed/matches/:sport', async (req, res) => {
   try {
     const { sport } = req.params;
-    const response = await axios.get(`${STREAMED_API_BASE}/matches/${sport}`, {
+    const response = await axios.get(`${WORKERS_API_BASE}/api/matches/${sport}`, {
       timeout: 15000
     });
     
@@ -1580,7 +1583,7 @@ app.get('/api/streamed/matches/all/popular', async (req, res) => {
 
 app.get('/api/streamed/matches/all-today', async (req, res) => {
   try {
-    const response = await axios.get(`${STREAMED_API_BASE}/matches/all-today`, {
+    const response = await axios.get(`${WORKERS_API_BASE}/api/matches/all-today`, {
       timeout: 15000
     });
     res.json(response.data);
@@ -1604,7 +1607,7 @@ app.get('/api/streamed/matches/all-today/popular', async (req, res) => {
 
 app.get('/api/streamed/matches/live', async (req, res) => {
   try {
-    const response = await axios.get(`${STREAMED_API_BASE}/matches/live`, {
+    const response = await axios.get(`${WORKERS_API_BASE}/api/matches/live`, {
       timeout: 15000
     });
     res.json(response.data);
@@ -1629,7 +1632,7 @@ app.get('/api/streamed/matches/live/popular', async (req, res) => {
 app.get('/api/streamed/stream/:source/:id', async (req, res) => {
   try {
     const { source, id } = req.params;
-    const response = await axios.get(`${STREAMED_API_BASE}/stream/${source}/${id}`, {
+    const response = await axios.get(`${WORKERS_API_BASE}/api/stream/${source}/${id}`, {
       timeout: 10000
     });
     res.json(response.data);

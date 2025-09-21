@@ -1,4 +1,7 @@
-// Main JavaScript for ArenaStreams - Streamed.pk API only v2.1
+// Main JavaScript for ArenaStreams - Hybrid Vercel + Workers API v3.0
+// API Base URL - Cloudflare Workers backend
+const API_BASE_URL = 'https://arenastreams-api.enea-scalper.workers.dev';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile menu handling is done in individual templates
     
@@ -26,13 +29,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Auto-refresh for live matches (every 30 seconds) - Streamed.pk API only
+    // Auto-refresh for live matches (every 30 seconds) - Workers API
     if (window.location.pathname === '/') {
         setInterval(function() {
             // Only refresh if user is not interacting with the page
             if (document.hidden) return;
             
-            fetch('/api/streamed/matches/live')
+            fetch(`${API_BASE_URL}/api/matches/live`)
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data)) {
@@ -56,8 +59,8 @@ async function loadSportMatches(sport) {
     try {
         console.log(`🔄 Loading ${sport} matches from Streamed.pk...`);
         
-        // Use our proxy API (avoids CORS issues)
-        const streamedResponse = await fetch(`/api/streamed/matches/${sport}`);
+        // Use Workers API (avoids CORS issues)
+        const streamedResponse = await fetch(`${API_BASE_URL}/api/matches/${sport}`);
         const streamedData = await streamedResponse.json();
         
         // Handle the API response structure - prioritize direct array (matches API docs)
@@ -274,7 +277,7 @@ async function loadLiveMatches() {
     try {
         console.log('🔴 Loading live matches from Streamed.pk...');
         
-        const response = await fetch('/api/streamed/matches/live');
+        const response = await fetch(`${API_BASE_URL}/api/matches/live`);
         const data = await response.json();
         
         // Handle the API response structure
@@ -427,7 +430,7 @@ async function loadTodaysMatches() {
     try {
         console.log('📅 Loading today\'s matches from Streamed.pk...');
         
-        const response = await fetch('/api/streamed/matches/all-today');
+        const response = await fetch(`${API_BASE_URL}/api/matches/all-today`);
         const data = await response.json();
         
         // Handle the API response structure

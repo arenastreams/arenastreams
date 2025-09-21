@@ -1,0 +1,14 @@
+name = "arenastreams"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+STREAMED_API_BASE = "https://streamed.pk/api"
+
+# Environment variables for production
+[env.production.vars]
+STREAMED_API_BASE = "https://streamed.pk/api"
+
+# Environment variables for development
+[env.development.vars]
+STREAMED_API_BASE = "https://streamed.pk/api"
